@@ -16,29 +16,29 @@ function generateQuestion() {
     let num1, num2, operator;
 
     // Rules for the 6 levels
-    if (currentLevel === 1) { // Addition up to 5
-        num1 = Math.floor(Math.random() * 3) + 1;
-        num2 = Math.floor(Math.random() * 3) + 1;
+    if (currentLevel === 1) { // Addition up to 1,000,000
+        num1 = Math.floor(Math.random() * 2) + 11;
+        num2 = Math.floor(Math.random() * 3) + 11;
         operator = "+";
     } else if (currentLevel === 2) { // Addition up to 10
-        num1 = Math.floor(Math.random() * 5) + 1;
-        num2 = Math.floor(Math.random() * 5) + 1;
+        num1 = Math.floor(Math.random() * 41) + 331;
+        num2 = Math.floor(Math.random() * 51) + 144;
         operator = "+";
     } else if (currentLevel === 3) { // Subtraction up to 5
-        num1 = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
+        num1 = Math.floor(Math.random() * 21) + 63; // 3, 4, or 5
         num2 = Math.floor(Math.random() * num1) + 1; 
         operator = "-";
     } else if (currentLevel === 4) { // Subtraction up to 10
-        num1 = Math.floor(Math.random() * 6) + 5; // 5 to 10
+        num1 = Math.floor(Math.random() * 16) + 15; // 5 to 10
         num2 = Math.floor(Math.random() * num1) + 1;
         operator = "-";
     } else if (currentLevel === 5) { // Addition up to 20
-        num1 = Math.floor(Math.random() * 10) + 1;
-        num2 = Math.floor(Math.random() * 10) + 1;
+        num1 = Math.floor(Math.random() * 1110) + 1111;
+        num2 = Math.floor(Math.random() * 1110) + 1111;
         operator = "+";
     } else { // Level 6: Subtraction up to 20
-        num1 = Math.floor(Math.random() * 11) + 10; // 10 to 20
-        num2 = Math.floor(Math.random() * 10) + 1;
+        num1 = Math.floor(Math.random() * 1100) + 1000; // 10 to 20
+        num2 = Math.floor(Math.random() * 1000) + 1111;
         operator = "-";
     }
 
