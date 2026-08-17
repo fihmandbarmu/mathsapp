@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Adventure!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>🌟 Math Adventure! 🌟</h1>
+        
+        <div class="stats">
+            <div id="level-display">Level: 1</div>
+            <div id="stars-display">Stars: ⭐⭐⭐</div>
+        </div>
+
+        <div id="question-box">
+            <span id="num1">2</span> 
+            <span id="operator">+</span> 
+            <span id="num2">2</span> 
+            = ?
+        </div>
+
+        <div id="message">Choose the right answer!</div>
+
+        <div class="options">
+            <button class="answer-btn" onclick="checkAnswer(this)">3</button>
+            <button class="answer-btn" onclick="checkAnswer(this)">4</button>
+            <button class="answer-btn" onclick="checkAnswer(this)">5</button>
+        </div>
+
+        <div id="winner-screen" class="hidden">
+            <h2>🎉 YOU WON! 🎉</h2>
+            <p>You beat Level 6! You are a Math Master!</p>
+            <button class="restart-btn" onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
