@@ -67,7 +67,7 @@ function generateQuestion() {
     answers.sort(() => Math.random() - 0.5);
 
     // Put the answers on the buttons
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
         buttons[i].textContent = answers[i];
     }
 }
@@ -80,7 +80,7 @@ function checkAnswer(button) {
         messageEl.style.color = "#32CD32";
         stars++;
         
-        if (stars >= 3) {
+        if (stars >= 20) {
             levelUp();
         } else {
             updateStars();
