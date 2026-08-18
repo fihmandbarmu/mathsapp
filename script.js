@@ -22,79 +22,85 @@ function generateQuestion() {
     let num1, num2, operator;
     let mathType = "+";
 
-    // Figure out what kind of math based on the level!
+    // Randomize addition and subtraction for the first 9000 levels
     if (currentLevel <= 9000) {
-        // Levels 1 - 9,000: Column Addition
-        mathType = "+";
+        mathType = Math.random() > 0.5 ? "+" : "-"; 
     } else if (currentLevel <= 20000) {
-        // Levels 9,001 - 20,000: Grouping (Multiplication)
         mathType = "x";
     } else if (currentLevel <= 40853) {
-        // Levels 20,001 - 40,853: Division
         mathType = "÷";
     } else {
-        // Levels 40,854 - 85,373: Random Math!
         mathType = getRandomMathType();
     }
 
-    // Generate the numbers based on the math type
+    // REALLY HARD MATH LOGIC
     if (mathType === "+") {
-        num1 = Math.floor(Math.random() * (10 + currentLevel % 150)) + 6631;
-        num2 = Math.floor(Math.random() * (10 + currentLevel % 503)) + 111;
+        // 3-digit and 4-digit addition!
+        num1 = Math.floor(Math.random() * 9000) + 100;
+        num2 = Math.floor(Math.random() * 9000) + 100;
         operator = "+";
         correctAnswer = num1 + num2;
     } 
     else if (mathType === "-") {
-        num1 = Math.floor(Math.random() * (20 + currentLevel % 150)) + 101;
-        num2 = Math.floor(Math.random() * num1) + 1; // Make sure answer isn't negative
+        // 4-digit subtraction!
+        num1 = Math.floor(Math.random() * 9000) + 1000;
+        num2 = Math.floor(Math.random() * (num1 - 100)) + 100; // Always positive answer
         operator = "-";
         correctAnswer = num1 - num2;
     }
     else if (mathType === "x") {
-        num1 = Math.floor(Math.random() * 1112) + 1111;
-        num2 = Math.floor(Math.random() * 1112) + 1111;
+        // Double-digit multiplication! (e.g., 45 x 23)
+        num1 = Math.floor(Math.random() * 90) + 10;
+        num2 = Math.floor(Math.random() * 90) + 10;
         operator = "x";
         correctAnswer = num1 * num2;
     }
     else if (mathType === "÷") {
-        let answer = Math.floor(Math.random() * 1112) + 1111;
-        num2 = Math.floor(Math.random() * 15252) + 1111;
-        num1 = num2 * answer; // Guarantees clean division!
+        // Hard division! (e.g., 2415 ÷ 35)
+        let answer = Math.floor(Math.random() * 90) + 10;
+        num2 = Math.floor(Math.random() * 90) + 10;
+        num1 = num2 * answer; 
         operator = "÷";
         correctAnswer = answer;
     }
 
     // Put numbers on screen
-    num1El.textContent = num1;
-    num2El.textContent = num2;
+    num1El.textContent = num1.toLocaleString();
+    num2El.textContent = num2.toLocaleString();
     operatorEl.textContent = operator;
 
-    // Create 1 correct answer and 2 wrong answers
+    // Create TRICKY wrong answers!
     let answers = [correctAnswer];
+    let tricks = [1, 10, 100, -1, -10, -100]; // Off by exactly 1, 10, or 100 to trick you!
+    
+    // Shuffle the trick numbers so it's different every time
+    tricks.sort(() => Math.random() - 0.5);
+
+    let trickIndex = 0;
     while (answers.length < 3) {
-        let offset = Math.floor(Math.random() * 9) - 4; // Off by a little bit
-        if (offset === 0) offset = 1;
-        let wrongAnswer = correctAnswer + offset;
+        let wrongAnswer = correctAnswer + tricks[trickIndex];
+        trickIndex++;
         
         if (wrongAnswer >= 0 && !answers.includes(wrongAnswer)) {
             answers.push(wrongAnswer);
         }
     }
 
-    // Mix up the buttons!
+    // Mix up the buttons so the correct answer isn't always in the same spot
     answers.sort(() => Math.random() - 0.5);
 
     // Put the answers on the buttons
     for (let i = 0; i < 3; i++) {
-        buttons[i].textContent = answers[i];
+        buttons[i].textContent = answers[i].toLocaleString();
     }
 }
 
 function checkAnswer(button) {
-    let chosenAnswer = parseInt(button.textContent);
+    // Remove the commas to check the real number
+    let chosenAnswer = parseInt(button.textContent.replace(/,/g, ''));
 
     if (chosenAnswer === correctAnswer) {
-        messageEl.textContent = "Awesome! ⭐";
+        messageEl.textContent = "Genius! ⭐";
         messageEl.style.color = "#32CD32";
         stars++;
         
@@ -102,22 +108,21 @@ function checkAnswer(button) {
             levelUp();
         } else {
             updateStats();
-            setTimeout(generateQuestion, 800); // Loads the next question faster!
+            setTimeout(generateQuestion, 800); 
         }
     } else {
-        messageEl.textContent = "Oops! Try again!";
+        messageEl.textContent = "Oops! Look closely!";
         messageEl.style.color = "red";
     }
 }
 
 function updateStats() {
     starsDisplay.textContent = "Stars: " + stars + " / " + starsRequired + " 🌟";
-    levelDisplay.textContent = "Level: " + currentLevel;
+    levelDisplay.textContent = "Level: " + currentLevel.toLocaleString();
 }
 
 function levelUp() {
     if (currentLevel === maxLevel) {
-        // You beat Level 85,373!
         document.getElementById("question-box").classList.add("hidden");
         document.querySelector(".options").classList.add("hidden");
         messageEl.classList.add("hidden");
