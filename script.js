@@ -39,7 +39,7 @@ function generateQuestion() {
 
     // Generate the numbers based on the math type
     if (mathType === "+") {
-        num1 = Math.floor(Math.random() * (10 + currentLevel % 150)) + 621;
+        num1 = Math.floor(Math.random() * (10 + currentLevel % 150)) + 6631;
         num2 = Math.floor(Math.random() * (10 + currentLevel % 503)) + 111;
         operator = "+";
         correctAnswer = num1 + num2;
