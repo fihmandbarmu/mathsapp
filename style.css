@@ -38,7 +38,7 @@ h1 {
     padding: 20px;
     box-shadow: inset 0px 4px 8px rgba(0,0,0,0.1);
     margin: 20px 0;
-    font-size: 60px;
+    font-size: 50px; /* Made slightly smaller for big numbers */
     font-weight: bold;
     color: #333;
     display: flex;
@@ -49,15 +49,16 @@ h1 {
 .math-column {
     display: inline-block;
     text-align: right;
-    border-bottom: 6px solid #333; /* The equals line */
+    border-bottom: 6px solid #333;
     padding-bottom: 5px;
     margin-bottom: 10px;
-    min-width: 120px;
+    min-width: 150px;
 }
 
 .row-two {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
 }
 
 .question-mark {
@@ -75,6 +76,7 @@ h1 {
 .options {
     display: flex;
     justify-content: space-around;
+    gap: 10px;
 }
 
 .answer-btn {
@@ -82,8 +84,8 @@ h1 {
     color: white;
     border: none;
     border-radius: 15px;
-    font-size: 36px;
-    width: 90px;
+    font-size: 26px; /* Made smaller so big numbers fit perfectly! */
+    width: 100px;
     height: 90px;
     cursor: pointer;
     box-shadow: 0px 6px 0px #C71585;
