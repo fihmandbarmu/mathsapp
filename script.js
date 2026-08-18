@@ -39,26 +39,26 @@ function generateQuestion() {
 
     // Generate the numbers based on the math type
     if (mathType === "+") {
-        num1 = Math.floor(Math.random() * (10 + currentLevel % 50)) + 1;
-        num2 = Math.floor(Math.random() * (10 + currentLevel % 50)) + 1;
+        num1 = Math.floor(Math.random() * (10 + currentLevel % 150)) + 621;
+        num2 = Math.floor(Math.random() * (10 + currentLevel % 503)) + 111;
         operator = "+";
         correctAnswer = num1 + num2;
     } 
     else if (mathType === "-") {
-        num1 = Math.floor(Math.random() * (20 + currentLevel % 50)) + 10;
+        num1 = Math.floor(Math.random() * (20 + currentLevel % 150)) + 101;
         num2 = Math.floor(Math.random() * num1) + 1; // Make sure answer isn't negative
         operator = "-";
         correctAnswer = num1 - num2;
     }
     else if (mathType === "x") {
-        num1 = Math.floor(Math.random() * 12) + 1;
-        num2 = Math.floor(Math.random() * 12) + 1;
+        num1 = Math.floor(Math.random() * 1112) + 1111;
+        num2 = Math.floor(Math.random() * 1112) + 1111;
         operator = "x";
         correctAnswer = num1 * num2;
     }
     else if (mathType === "÷") {
-        let answer = Math.floor(Math.random() * 12) + 1;
-        num2 = Math.floor(Math.random() * 12) + 1;
+        let answer = Math.floor(Math.random() * 1112) + 1111;
+        num2 = Math.floor(Math.random() * 15252) + 1111;
         num1 = num2 * answer; // Guarantees clean division!
         operator = "÷";
         correctAnswer = answer;
