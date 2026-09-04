@@ -1,7 +1,7 @@
 let currentLevel = 1;
 let stars = 0;
 const starsRequired = 100;
-const maxLevel = 85373;
+const maxLevel = 150;
 let correctAnswer = 0;
 
 const levelDisplay = document.getElementById("level-display");
@@ -25,7 +25,7 @@ function generateQuestion() {
     // Randomize addition and subtraction for the first 9000 levels
     if (currentLevel <= 9000) {
         mathType = Math.random() > 0.5 ? "+" : "-"; 
-    } else if (currentLevel <= 20000) {
+    } else if (currentLevel <= 50) {
         mathType = "x";
     } else if (currentLevel <= 40853) {
         mathType = "÷";
@@ -100,7 +100,7 @@ function checkAnswer(button) {
     let chosenAnswer = parseInt(button.textContent.replace(/,/g, ''));
 
     if (chosenAnswer === correctAnswer) {
-        messageEl.textContent = "Genius! ⭐";
+        messageEl.textContent = "Awsoume! ", "Cool!";
         messageEl.style.color = "#32CD32";
         stars++;
         
