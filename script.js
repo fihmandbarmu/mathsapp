@@ -3,6 +3,7 @@ let stars = 0;
 const starsRequired = 100;
 const maxLevel = 150;
 let correctAnswer = 0;
+let lastOutcome = null; // 'correct' or 'incorrect'
 
 const levelDisplay = document.getElementById("level-display");
 const starsDisplay = document.getElementById("stars-display");
@@ -33,32 +34,41 @@ function generateQuestion() {
         mathType = getRandomMathType();
     }
 
-    // REALLY HARD MATH LOGIC
+    // Difficulty adjustment: if the last answer was incorrect, make the next question easier;
+    // if the last answer was correct, make it slightly harder.
+    const easierFactor = lastOutcome === 'incorrect' ? 0.12 : 1; // reduce ranges when incorrect
+    const harderFactor = lastOutcome === 'correct' ? 1.4 : 1; // increase ranges slightly when correct
+
+    // REALLY HARD MATH LOGIC (with dynamic ranges)
     if (mathType === "+") {
         // 3-digit and 4-digit addition!
-        num1 = Math.floor(Math.random() * 9000) + 100;
-        num2 = Math.floor(Math.random() * 9000) + 100;
+        const baseRange1 = Math.floor(9000 * easierFactor * harderFactor) + 100;
+        const baseRange2 = Math.floor(9000 * easierFactor * harderFactor) + 100;
+        num1 = Math.floor(Math.random() * Math.max(1, baseRange1)) + 100;
+        num2 = Math.floor(Math.random() * Math.max(1, baseRange2)) + 100;
         operator = "+";
         correctAnswer = num1 + num2;
     } 
     else if (mathType === "-") {
         // 4-digit subtraction!
-        num1 = Math.floor(Math.random() * 9000) + 1000;
-        num2 = Math.floor(Math.random() * (num1 - 100)) + 100; // Always positive answer
+        const baseNum1Range = Math.floor(9000 * easierFactor * harderFactor) + 1000;
+        num1 = Math.floor(Math.random() * Math.max(1, baseNum1Range)) + 1000;
+        num2 = Math.floor(Math.random() * Math.max(1, num1 - 100)) + 100; // Always positive answer
         operator = "-";
         correctAnswer = num1 - num2;
     }
     else if (mathType === "x") {
         // Double-digit multiplication! (e.g., 45 x 23)
-        num1 = Math.floor(Math.random() * 90) + 10;
-        num2 = Math.floor(Math.random() * 90) + 10;
+        const mulRange = Math.floor(90 * Math.max(0.3, easierFactor * harderFactor));
+        num1 = Math.floor(Math.random() * Math.max(1, mulRange)) + 10;
+        num2 = Math.floor(Math.random() * Math.max(1, mulRange)) + 10;
         operator = "x";
         correctAnswer = num1 * num2;
     }
     else if (mathType === "÷") {
         // Hard division! (e.g., 2415 ÷ 35)
-        let answer = Math.floor(Math.random() * 90) + 10;
-        num2 = Math.floor(Math.random() * 90) + 10;
+        let answer = Math.floor(Math.random() * 90 * Math.max(0.3, easierFactor * harderFactor)) + 10;
+        num2 = Math.floor(Math.random() * 90 * Math.max(0.3, easierFactor * harderFactor)) + 10;
         num1 = num2 * answer; 
         operator = "÷";
         correctAnswer = answer;
@@ -92,7 +102,13 @@ function generateQuestion() {
     // Put the answers on the buttons
     for (let i = 0; i < 3; i++) {
         buttons[i].textContent = answers[i].toLocaleString();
+        buttons[i].disabled = false; // ensure buttons are enabled for the new question
+        buttons[i].classList.remove('correct', 'incorrect', 'shake');
     }
+
+    // Clear message for the new question
+    messageEl.textContent = "Choose the right answer!";
+    messageEl.style.color = "#000";
 }
 
 function checkAnswer(button) {
@@ -100,19 +116,68 @@ function checkAnswer(button) {
     let chosenAnswer = parseInt(button.textContent.replace(/,/g, ''));
 
     if (chosenAnswer === correctAnswer) {
-        messageEl.textContent = "Awsoume! ", "Cool!";
+        // Correct answer flow
+        messageEl.textContent = "Awesome! ✅";
         messageEl.style.color = "#32CD32";
-        stars++;
-        
+        lastOutcome = 'correct';
+
+        // Always give at least one star; small chance for a bonus
+        let bonus = 0;
+        if (Math.random() < 0.12) { // 12% chance of bonus
+            bonus = Math.floor(Math.random() * 4) + 2; // 2-5 bonus stars
+            // small celebratory highlight
+            document.body.classList.add('flash-success');
+            setTimeout(() => document.body.classList.remove('flash-success'), 400);
+        }
+
+        stars += 1 + bonus;
+
+        // Visual feedback: mark the clicked button as correct
+        button.classList.add('correct');
+
         if (stars >= starsRequired) {
             levelUp();
         } else {
             updateStats();
-            setTimeout(generateQuestion, 800); 
+            setTimeout(() => {
+                generateQuestion();
+            }, 800);
         }
     } else {
-        messageEl.textContent = "Oops! Look closely!";
+        // Incorrect answer flow
+        messageEl.textContent = "Oops! Look closely! ✖️";
         messageEl.style.color = "red";
+        lastOutcome = 'incorrect';
+
+        // Penalize a little but never below zero
+        stars = Math.max(0, stars - 1);
+
+        // Give the user a hint by briefly highlighting the correct button
+        let correctBtn = null;
+        buttons.forEach(b => {
+            if (parseInt(b.textContent.replace(/,/g, '')) === correctAnswer) {
+                correctBtn = b;
+            }
+        });
+
+        // Mark clicked button as incorrect
+        button.classList.add('incorrect');
+
+        // Shake effect for the wrong button (CSS required)
+        button.classList.add('shake');
+        setTimeout(() => button.classList.remove('shake'), 600);
+
+        if (correctBtn) {
+            correctBtn.classList.add('correct');
+            setTimeout(() => correctBtn.classList.remove('correct'), 1200);
+        }
+
+        updateStats();
+
+        // After a short pause, give an easier question
+        setTimeout(() => {
+            generateQuestion();
+        }, 1200);
     }
 }
 
@@ -139,6 +204,7 @@ function levelUp() {
 function restartGame() {
     currentLevel = 1;
     stars = 0;
+    lastOutcome = null;
     updateStats();
     messageEl.textContent = "Choose the right answer!";
     
